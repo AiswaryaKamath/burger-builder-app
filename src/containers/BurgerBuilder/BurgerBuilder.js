@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Auxiliary from "../../hoc/Auxiliary";
 import Burger from "../../components/Burger/Burger";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
+import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 
 const INGEDIENT_PRICE = {
   salad: 0.2,
@@ -20,6 +22,7 @@ class BurgerBuilder extends Component {
     },
     totalPrice: 4,
     purchasable: false,
+    purchasing: false,
   };
 
   updatePurchaseHandler = (ingredients) => {
@@ -33,7 +36,7 @@ class BurgerBuilder extends Component {
         return sum + el;
       }, 0);
     console.log(isPurchasable);
-    this.setState({ purchasable: isPurchasable >0 });
+    this.setState({ purchasable: isPurchasable > 0 });
   };
 
   addIngredientHandler = (type) => {
@@ -78,6 +81,18 @@ class BurgerBuilder extends Component {
     this.updatePurchaseHandler(updatedIngredient);
   };
 
+  purchaseHandler = () => {
+    this.setState({
+      purchasing: true,
+    });
+  };
+
+  cancelPurchaseHandler = () => {
+    this.setState({
+      purchasing: false,
+    });
+  };
+
   render() {
     const disabledIngredient = { ...this.state.ingredient }; //object literal spread operator
     for (let key in disabledIngredient) {
@@ -86,9 +101,21 @@ class BurgerBuilder extends Component {
     //console.log(disabledIngredient);
     return (
       <Auxiliary>
-          {console.log(this.state.purchasable)}
+        {console.log(this.state.purchasable)}
+
+        <Modal
+          show={this.state.purchasing}
+          clicked={this.cancelPurchaseHandler}
+        >
+          <OrderSummary
+            ingredient={this.state.ingredient}
+            cancelBtn={this.cancelPurchaseHandler}
+          />
+        </Modal>
+
         <Burger ingredients={this.state.ingredient} />
         <BuildControls
+          purchasingOrder={this.purchaseHandler}
           adIngredient={this.addIngredientHandler}
           rmIngredient={this.removeIngredientHandler}
           disabledIng={disabledIngredient}
