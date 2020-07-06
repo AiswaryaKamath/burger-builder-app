@@ -93,6 +93,10 @@ class BurgerBuilder extends Component {
     });
   };
 
+  proceedPurchaseHandler = () => {
+    alert("Success!");
+  };
+
   render() {
     const disabledIngredient = { ...this.state.ingredient }; //object literal spread operator
     for (let key in disabledIngredient) {
@@ -109,7 +113,9 @@ class BurgerBuilder extends Component {
         >
           <OrderSummary
             ingredient={this.state.ingredient}
+            proceedBtn={this.proceedPurchaseHandler}
             cancelBtn={this.cancelPurchaseHandler}
+            totalPrice={this.state.totalPrice}
           />
         </Modal>
 
